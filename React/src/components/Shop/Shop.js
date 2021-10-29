@@ -80,7 +80,7 @@ const Shop = () => {
                             className={number == page ? 'selected' : ''}
                             key={number}
                             onClick={() => setPage(number)}
-                            >{number}</button>)
+                            >{number + 1}</button>)
                         }
                     </div>
                 </div>
