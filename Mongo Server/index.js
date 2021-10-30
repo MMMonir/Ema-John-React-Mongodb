@@ -17,6 +17,7 @@ async function run() {
       await client.connect();
       const database = client.db("onlineShop");
       const productCollection = database.collection("products");
+      const orderCollection = database.collection("orders");
     // create a document to insert data from here start
     //   const doc = {
     //     name: "Monirul Islam",
@@ -27,14 +28,14 @@ async function run() {
     //   console.log(`A document was inserted with the _id: ${result.insertedId}`);
     // create a document to insert data from here End
 
-      //POST API: Sending data from React UI to Mongodb Start
-      app.post('/products/byKeys', async (req, res) => {
-          const keys = req.body;
-          const query = { key: { $in: keys } }
-          const products = await productCollection.find(query).toArray();
-          res.send(products);
+      //POST API: (Add Order) Sending data from React UI to Mongodb Start
+      app.post('/orders', async(req, res) => {
+        const order = req.body;
+        // const result = await usersCollection.insertOne(newUser);
+        console.log('order', order);
+        res.json('Order Processed')
       });
-      //POST API: Sending data from React UI to Mongodb End
+      //POST API: (Add Order) Sending data from React UI to Mongodb End
 
       //GET API: from Mongodb to React website Start
       app.get('/products', async(req, res) => {
@@ -59,6 +60,23 @@ async function run() {
         })
       });
       //GET API: from Mongodb to React website End
+
+      //Use POST to get data by keys Start
+      app.post('/products/byKeys', async (req, res) => {
+          const keys = req.body;
+          const query = { key: { $in: keys } }
+          const products = await productCollection.find(query).toArray();
+          res.send(products);
+      });
+      //Use POST to get data by keys End
+
+      //POST API: Sending data from React UI to Mongodb Start
+      app.post('/orders', async(req, res) => {
+        const order = req.body;
+        const result = await orderCollection.insertOne(order);
+        res.json(result);
+      });
+      //POST API: Sending data from React UI to Mongodb End
 
       //Details API: Get Details from user id from Backend Start
     //   app.get('/users/:id', async(req, res) => {
