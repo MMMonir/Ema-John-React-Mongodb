@@ -16,7 +16,7 @@ async function run() {
     try {
       await client.connect();
       const database = client.db("onlineShop");
-      const productsCollection = database.collection("products");
+      const productCollection = database.collection("products");
     // create a document to insert data from here start
     //   const doc = {
     //     name: "Monirul Islam",
@@ -28,18 +28,17 @@ async function run() {
     // create a document to insert data from here End
 
       //POST API: Sending data from React UI to Mongodb Start
-    //   app.post('/users', async(req, res) => {
-    //     const newUser = req.body;
-    //     const result = await usersCollection.insertOne(newUser);
-    //     console.log('Got new user', req.body);
-    //     console.log('added user', result)
-    //     res.json(result)
-    //   });
+      app.post('/products/byKeys', async (req, res) => {
+          const keys = req.body;
+          const query = { key: { $in: keys } }
+          const products = await productCollection.find(query).toArray();
+          res.send(products);
+      });
       //POST API: Sending data from React UI to Mongodb End
 
       //GET API: from Mongodb to React website Start
       app.get('/products', async(req, res) => {
-        const cursor = productsCollection.find({});
+        const cursor = productCollection.find({});
         const page = req.query.page;
         const size = parseInt(req.query.size);
         let products;
