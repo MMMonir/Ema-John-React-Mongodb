@@ -31,9 +31,9 @@ async function run() {
       //POST API: (Add Order) Sending data from React UI to Mongodb Start
       app.post('/orders', async(req, res) => {
         const order = req.body;
-        // const result = await usersCollection.insertOne(newUser);
-        console.log('order', order);
-        res.json('Order Processed')
+        const result = await orderCollection.insertOne(order);
+        // console.log('order', order);
+        res.json(result)
       });
       //POST API: (Add Order) Sending data from React UI to Mongodb End
 
