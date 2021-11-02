@@ -18,24 +18,29 @@ async function run() {
       const database = client.db("onlineShop");
       const productCollection = database.collection("products");
       const orderCollection = database.collection("orders");
-    // create a document to insert data from here start
-    //   const doc = {
-    //     name: "Monirul Islam",
-    //     email: "monirecebd@gmail",
-    //     occupation: "Freelancer"
-    //   }
-    //   const result = await usersCollection.insertOne(doc);
-    //   console.log(`A document was inserted with the _id: ${result.insertedId}`);
-    // create a document to insert data from here End
 
-      //POST API: (Add Order) Sending data from React UI to Mongodb Start
+      //(Add Order) Sending data from React UI to Mongodb Start
       app.post('/orders', async(req, res) => {
         const order = req.body;
+        //For order created Time
+        order.createAt = new Date();
         const result = await orderCollection.insertOne(order);
-        // console.log('order', order);
         res.json(result)
       });
-      //POST API: (Add Order) Sending data from React UI to Mongodb End
+      //(Add Order) Sending data from React UI to Mongodb End
+
+      //(Get Order) from Mongodb database to React Start
+      app.get('/orders', async(req, res) => {
+        let query = {};
+        const email = req.query.email;
+        if(email){
+          query = {email: email};
+        }
+        const cursor = orderCollection.find(query);
+        const orders = await cursor.toArray();
+        res.json(orders);
+      });
+      //(Get Order) from Mongodb database to React End
 
       //GET API: from Mongodb to React website Start
       app.get('/products', async(req, res) => {
